@@ -1,7 +1,7 @@
 # Apollo Audio Generation and Recording Demo
 ## Author: Xuhui Zhan, Siyu Yang
 
-This project repository contains scripts for generating and recording audio using advanced machine learning models, including transformer-based models for text-to-speech (TTS) synthesis. 
+This project repository contains scripts for generating and recording audio using advanced machine learning models, including transformer-based models for text-to-speech (TTS) synthesis. [1]
 
 ## 1. Background Information
 
@@ -121,4 +121,23 @@ stop_button.on_click(stop_recording)
 # Display widgets
 display(start_button, stop_button, time_label)
 ```
+(Link to demo streamlit/gradio)
+## 5. Future Development
 
+### 5.1 Advanced Voice Modeling Techniques
+
+Emotional Expression: Incorporate models that can analyze and replicate the emotional state of the speaker, allowing the synthesized singing to convey more complex emotions.
+
+Style Transfer: Develop capabilities to not only mimic the voice but also adapt different singing styles, enabling users to choose styles ranging from classical to pop or jazz.
+
+### 5.2 Personalization and User Profiles
+
+Develop a user profile system where individual voice preferences, styles, and settings can be saved and recalled for personalized experiences. This could also include adaptive learning from user feedback to continuously improve the voice output.
+
+### 5.3 Integration with Music Composition Tools
+
+Create interfaces that allow seamless integration with digital audio workstations (DAWs) and music composition software, enabling musicians and producers to directly utilize the TTS system in their creative processes.
+
+## 6. Reference List
+
+[1] G. Eren (2021), A deep learning toolkit for Text-to-Speech, battle-tested in research and production, retrieved from https://www.coqui.ai
