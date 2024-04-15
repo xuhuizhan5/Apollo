@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\title{Pseudocode for Real-Time Audio Translation System}
+\author{Xuhui Zhan, Siyu Yang}
+
+\begin{document}
+
+\maketitle
+
+\begin{algorithm}
+\caption{Real-Time Audio Translation System}
+\begin{algorithmic}[1]
+\State \textbf{Initialize:}
+\State Load WhisperModel  \Comment{Speech to text model}
+\State Load HelsinkiNLPModel (zh-en or en-zh) \Comment{Translation model based on target language}
+\State Load XTTSV2Model \Comment{Text-to-speech model}
+
+\State \textbf{Capture and Process Audio:}
+\State Capture complete audio from microphone \Comment{Record full session}
+\State Save audio as original\_audio.wav \Comment{Save original audio}
+\State transcribed\_text $\gets$ WhisperModel.transcribe(original\_audio.wav) \Comment{Transcribe audio}
+\State Save transcribed\_text to file as transcription.txt
+
+\If{target\_language is English}
+  \State translated\_text $\gets$ HelsinkiNLPModelZHtoEN.translate(transcribed\_text) \Comment{Translate to English}
+\ElsIf{target\_language is Chinese}
+  \State translated\_text $\gets$ HelsinkiNLPModelENtoZH.translate(transcribed\_text) \Comment{Translate to Chinese}
+\EndIf
+\State Save translated\_text to file as translated.txt \Comment{Save translated text}
+
+\State speaker\_embedding $\gets$ XTTSV2Model.create\_speaker\_embedding(original\_audio.wav) \Comment{Create voice profile}
+\State audio\_output $\gets$ XTTSV2Model.synthesize(translated\_text, speaker\_embedding) \Comment{Generate speech}
+\State Save audio\_output as output.wav \Comment{Save synthesized speech}
+
+\State Play audio\_output \Comment{Output translated audio}
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}

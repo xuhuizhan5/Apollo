@@ -1,143 +1,209 @@
-# Apollo Audio Generation and Recording Demo
+# Real-Time Audio Translation System
+
 ## Author: Xuhui Zhan, Siyu Yang
 
-This project repository contains scripts for generating and recording audio using advanced machine learning models, including transformer-based models for text-to-speech (TTS) synthesis. [1]
+This repository contains the implementation of a real-time audio translation system designed to seamlessly translate audio content between Chinese and English. The primary goal of this system is to facilitate effortless communication between speakers of these two languages. Additionally, the system generates intermediate files that can serve as initial datasets for training text-to-speech (TTS) models. This capability opens up further possibilities, such as developing models that could translate songs from Chinese to English and vice versa, enhancing cross-cultural music accessibility.
 
 ## 1. Background Information
 
 ### 1.1 Overview
-The primary objective of this project is to develop a Text-to-Speech (TTS) system that can learn and mimic the unique vocal characteristics of an individual's speaking voice and use this model to synthesize singing audio. This technology aims to bridge the gap between conventional speech synthesis and the generation of musically expressive vocal tracks, which can be particularly useful in applications such as personalized music creation, virtual avatars, and assistive technologies for artists with vocal limitations.
+Our Real-Time Audio Translation System is engineered to bridge the language gap between Chinese and English speakers through instantaneous audio translation. Beyond basic translation, this system uniquely preserves the vocal characteristics of the original speaker, ensuring that the translated audio retains the speaker's intonation and style. This feature enriches the communication experience, making interactions more natural and engaging.
+
+The system's dual functionality not only supports real-time conversation between diverse language speakers but also facilitates the creation of valuable datasets. These datasets consist of translated text and audio files that are ideal for training sophisticated Text-to-Speech (TTS) models. Such models can learn to mimic the nuances of spoken language in various applications, including the ambitious goal of translating and reproducing songs in different languages while maintaining the original artist's expressive vocal traits.
+
+This project aims not only to simplify communication across linguistic boundaries but also to push the boundaries of how we interact with and experience language in multimedia and entertainment, fostering a deeper cultural exchange.
 
 ### 1.2 Challenges
 
-Voice Modeling Accuracy: Capturing the nuanced vocal attributes of a person's voice, such as pitch, timbre, and dynamics, which are crucial for realistic and personalized singing synthesis.
+#### Real-Time Processing Demands
 
-Data Requirement: Collecting sufficient and high-quality recordings of a person's voice for training the TTS model without introducing significant noise or distortion that could degrade the quality of the synthesized singing.
-Melody and Lyrics Synchronization: Ensuring that the synthesized singing aligns accurately with the intended melody and rhythm of the song, which involves complex timing and prosody adjustments.
+Achieving near real-time audio translation on standard CPU hardware is inherently challenging due to the computational intensity of processing audio data, translating text, and generating speech in a seamless flow. These operations typically require significant computational resources, which can be a limiting factor in real-time applications.
 
-Emotional Expression: Integrating emotional expressions into the synthesized singing voice, which is essential for delivering a performance that feels engaging and true to the original singer's intent.
+#### Maintaining Translation Accuracy
 
-Performance and Scalability: Optimizing the system to handle the extensive computational requirements of training and running deep learning models for TTS while ensuring that the system can scale to accommodate multiple users or different vocal styles.
+High accuracy in audio translation involves complex linguistic and technical challenges, especially when dealing with idiomatic expressions, varied dialects, and context-dependent meanings. Ensuring the translated output remains true to the original intent and meaning is critical for effective communication and requires advanced linguistic processing capabilities.
 
-## 2. Method
+#### System Complexity and Modularity
 
-### 2.1 Text-to-Speech (TTS)
+The system's architecture is divided into three main modules: audio-to-text, text-to-text translation, and translated text-to-audio generation. Each module must not only perform efficiently on its own but also integrate smoothly with others, complicating the design and maintenance of the system. This modularity, while beneficial for updates and scalability, adds layers of complexity in development and testing.
 
-![image](https://github.com/xuhuizhan5/Apollo/assets/142248146/ea511fe6-a076-4fc0-bef6-2380335aa641)
+#### Preserving Speaker Characteristics
 
-Text-to-Speech (TTS) technology converts written text into spoken voice output. TTS systems are often used in applications like virtual assistants, navigation systems, and accessibility tools for visually impaired users. The TTS process involves two main steps: text analysis, where the text is converted into a linguistic structure, and sound generation, where this structure is used to synthesize the spoken output. Modern TTS systems often use deep learning and transformer models, which allow for more natural and expressive voice synthesis compared to traditional methods.
+One of the most advanced goals of our system is to not only translate spoken content but also to retain the unique vocal characteristics of the original speaker in the translated audio. This involves capturing subtle nuances such as emotion, tone, and rhythm, which are difficult to encode and reproduce accurately across languages.
 
-### 2.2 Transformers in Audio Processing
-Transformers are a type of deep learning model that have revolutionized many areas of machine learning, particularly natural language processing (NLP). Their ability to handle sequences of data and their scalability have also made them increasingly popular in audio processing tasks. In this repository, we utilize transformer models for generating speech from text. These models are capable of capturing the nuances of human speech, such as intonation and rhythm, more effectively than prior techniques.
+#### Data Availability for TTS Model Training
 
-## 3. TTS Psudocode
+Training sophisticated text-to-audio models to mimic the original voices accurately requires large volumes of high-quality, varied audio data. In many linguistic contexts, such datasets are scarce or incomplete, posing significant challenges in model training, especially for less common languages or dialects.
 
-![Screenshot 2024-04-13 141923](https://github.com/xuhuizhan5/Apollo/assets/142248146/47239bca-7e09-434f-8e93-b95573ee7e6c)
+### 1.3 Existed Solutions
 
-## 4. Project Demo
+1. Google translater
+2. Real time translator on Github
 
-Develop a robust model: Create a deep learning-based TTS model capable of learning detailed vocal characteristics from spoken voice inputs.
-```
-preload_models()
+## 2. Demostration
 
-# generate audio from text
-text_prompt = """
-     Hello, my name is Suno. And, uh — and I like pizza. [laughs] 
-     But I also have other interests such as playing tic tac toe.
-"""
-audio_array = generate_audio(text_prompt)
+#### Let' s play with the system!
 
-# save audio to disk
-write_wav("bark_generation.wav", SAMPLE_RATE, audio_array)
-  
-# play text in notebook
-Audio(audio_array, rate=SAMPLE_RATE)
-```
+*Check example input and output files and intermediate saved files in the `examples` folder*
 
-Implement voice conversion: Convert the learned vocal features to synthesize singing, adjusting for the required pitch and tempo of the song.
-```
-tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
+**Usage:**
 
-# generate speech by cloning a voice using default settings
-# tts.tts_to_file(text="Lucas's presenting issues include difficulties falling asleep, growing reluctance to attend school",
-#                 file_path="output.wav",
-#                 speaker_wav="speaker.wav",
-#                 language="en")
-wav = tts.tts(text="原谅太阳，原谅我", speaker_wav="speaker.wav", language="zh-cn")
+`pip install -r requirements.txt`
 
-Audio(wav, rate=22050)
-```
+`python app.py`
 
-Ensure high fidelity and naturalness: Produce high-quality singing audio that faithfully reproduces the vocal style and nuances of the original speaker's voice.
-```
-fs = 44100  # Sample rate
-channels = 1  # Mono recording
-recording = np.array([])  # Placeholder for the recorded data
-is_recording = False  # Flag to control recording
+## 3. Method
 
-def record_audio(indata, frames, time, status):
-    global recording
-    recording = np.append(recording, indata.copy())
+### 3.1 Audio to Texts (Whisper)
 
-def update_recording_time():
-    global is_recording
-    start_time = time.time()
-    while is_recording:
-        elapsed_time = time.time() - start_time
-        time_label.value = f"Recording... {elapsed_time:.2f} seconds"
-        time.sleep(0.1)  # Update every 100ms
+**Huggingface model card: https://huggingface.co/openai/whisper-base**
 
-def start_recording(button):
-    global is_recording, recording
-    recording = np.array([])  # Reset recording
-    is_recording = True
-    print("Recording started...")
-    # Start recording in a separate thread to avoid blocking
-    threading.Thread(target=lambda: sd.InputStream(callback=record_audio, channels=channels, samplerate=fs).start()).start()
-    # Update recording time in a separate thread
-    threading.Thread(target=update_recording_time).start()
+The Whisper model is an advanced automatic speech recognition (ASR) system developed by OpenAI, utilizing a transformer-based encoder-decoder architecture to convert audio into text. This model excels in robustness across a variety of audio types and languages due to training on a vast dataset comprising 680,000 hours of diverse, multilingual audio content. ([OpenAI](https://openai.com/blog/whisper/))
 
-def stop_recording(button):
-    global is_recording
-    is_recording = False
-    sd.stop()
-    print("Recording stopped.")
-    time_label.value = "Recording stopped."
-    # Normalize to 16-bit range and save
-    norm_audio = np.int16(recording / np.max(np.abs(recording)) * 32767)
-    filename = 'speaker.wav'
-    write(filename, fs, norm_audio)
-    print(f"Audio saved as {filename}")
+#### Model Overview
+Whisper processes audio by initially converting it into a log-Mel spectrogram. This serves as the input to the encoder within the transformer architecture. The encoder generates hidden states that are passed to the decoder, which sequentially generates the text transcription of the audio. This end-to-end process is equipped to handle both speech recognition and translation tasks, enhancing Whisper's versatility for multilingual applications.
 
-# Create buttons and label
-start_button = widgets.Button(description="Start Recording")
-stop_button = widgets.Button(description="Stop Recording")
-time_label = widgets.Label(value="Press 'Start Recording' to begin")
+![Whisper](./images/whisper.png)
 
-# Bind the buttons
-start_button.on_click(start_recording)
-stop_button.on_click(stop_recording)
+#### Advantages of Whisper
+One of the main advantages of Whisper is its high accuracy in transcription across various languages and dialects, robust against background noise, accents, and technical language. The model's multilingual capabilities significantly enhance its utility globally, especially in regions with scarce resources for certain languages. Moreover, Whisper's open-source availability allows developers to adapt and integrate the model into their projects, providing a foundation for customization based on specific needs. ([Model Explaination in details](https://www.louisbouchard.ai/whisper/))
 
-# Display widgets
-display(start_button, stop_button, time_label)
-```
-(Link to demo streamlit/gradio)
-## 5. Future Development
+This combination of versatility, performance, and accessibility makes Whisper a powerful tool in speech recognition and translation, ideal for projects that require reliable transcription in diverse and challenging audio environments.
 
-### 5.1 Advanced Voice Modeling Techniques
+### 3.2 Texts to Texts (Helsinki-NLP)
 
-Emotional Expression: Incorporate models that can analyze and replicate the emotional state of the speaker, allowing the synthesized singing to convey more complex emotions.
+**Huggingface model card (zh-en): https://huggingface.co/Helsinki-NLP/opus-mt-zh-en**
 
-Style Transfer: Develop capabilities to not only mimic the voice but also adapt different singing styles, enabling users to choose styles ranging from classical to pop or jazz.
+**Huggingface model card (zh-en): https://huggingface.co/Helsinki-NLP/opus-mt-en-zh**
 
-### 5.2 Personalization and User Profiles
+This section of the project leverages the Helsinki-NLP models from the OPUS-MT project hosted on the Hugging Face Model Hub. These models are specifically `Helsinki-NLP/opus-mt-zh-en` for translating Chinese to English and `Helsinki-NLP/opus-mt-en-ch` for translating English to Chinese. 
 
-Develop a user profile system where individual voice preferences, styles, and settings can be saved and recalled for personalized experiences. This could also include adaptive learning from user feedback to continuously improve the voice output.
+#### Model Overview
+The Helsinki-NLP/OPUS models are part of a series designed to provide efficient and accessible machine translation capabilities across a wide range of language pairs. These models are built using the Transformer architecture, which is renowned for its effectiveness in understanding context and generating coherent translations.
 
-### 5.3 Integration with Music Composition Tools
+#### Advantages of Helsinki-NLP/OPUS Models
+- **Wide Language Support:** Capable of translating between numerous language pairs, these models are particularly powerful for projects involving diverse linguistic inputs.
+- **Open Source:** Freely available for use and adaptation, they are ideal for academic, commercial, or personal projects.
+- **Performance:** Provides robust translation accuracy, making them suitable for real-time translation tasks in applications.
 
-Create interfaces that allow seamless integration with digital audio workstations (DAWs) and music composition software, enabling musicians and producers to directly utilize the TTS system in their creative processes.
+For detailed documentation on how to implement these models into your project, visit the [Hugging Face Model Hub](https://huggingface.co/Helsinki-NLP).
 
-## 6. Reference List
+### 3.3 Text-to-Speech (XTTS-V2)
 
-[1] G. Eren (2021), A deep learning toolkit for Text-to-Speech, battle-tested in research and production, retrieved from https://www.coqui.ai
+**Huggingface model card: https://huggingface.co/coqui/XTTS-v2**
+
+This section of the project focuses on converting translated text into spoken audio using the `tts_models/multilingual/multi-dataset/xtts_v2` model. This advanced model is designed to deliver high-quality speech synthesis and can mimic voice characteristics from input audio, enabling more personalized and natural-sounding output.
+
+#### Model Overview
+
+The `tts_models/multilingual/multi-dataset/xtts_v2` model is a state-of-the-art text-to-speech system that uses deep learning to produce natural-sounding speech. It is part of a broader initiative to develop versatile, multilingual TTS systems capable of handling diverse datasets and delivering clear, lifelike voice outputs.
+
+![Whisper](./images/xtts-v2.png)
+
+#### Unique Features of the xtts_v2 Model
+- **Voice Mimicking:** Capable of capturing and mimicking the voice characteristics from input audio, this model can reproduce specific vocal tones and styles, making it exceptionally useful for applications that require a consistent voice output matching original audio sources.
+- **Multilingual Capabilities:** Supports multiple languages, making it suitable for global applications that need to cater to various linguistic groups.
+- **High-Quality Audio Output:** Generates clear and natural voice outputs, which enhances user engagement in applications like audiobooks, virtual assistants, and interactive games.
+- **Adaptability:** Designed for flexibility, the model can be fine-tuned to specific voice characteristics or further trained on specialized datasets to meet the unique requirements of different projects.
+
+## 4. System Psudocode
+
+![pseduocode](./images/pseudocode.png)
+
+## 5. Project Demo
+
+Check the `demo.ipynb`
+## 6. Future Works
+
+1. **GPU Acceleration:** Leverage the GPU on computers to significantly accelerate processing times, enabling faster real-time audio translation and handling of complex tasks concurrently.
+
+2. **Advanced Modeling:** Explore the integration of more complex models in each component of the system to enhance overall performance and accuracy in transcription, translation, and speech synthesis.
+
+3. **Audio Preprocessing Enhancement:**
+   - Implement advanced audio preprocessing techniques to reduce background noise in the input audio. This will help ensure that the noise does not merge with the speaker's voice, which can degrade the quality of the output audio and affect the voice mimicry accuracy.
+
+4. **End-to-End Solution Development:**
+   - Utilize the saved input and output files to develop robust end-to-end solutions. This approach will streamline operations and potentially improve system responsiveness and efficiency.
+
+5. **Automated Audio Processing:**
+   - Automate the audio capture and processing workflow using threading to handle multiple tasks simultaneously.
+   - Integrate large language models (LLMs) in the backend to align and refine transcripts, such as combining truncated sentences into coherent wholes, enhancing the contextual accuracy of the output.
+
+6. **Data Utilization for Model Training:**
+   - Use the intermediate files generated during the translation process as initial datasets for training new models. This approach provides a valuable resource for model refinement and development.
+   - Augment these datasets with high-quality data from sources like audiobooks to further enhance the model performance and ensure the synthesized speech is natural and engaging.
+
+These initiatives will push the boundaries of what our real-time audio translation system can achieve, making it more robust, efficient, and versatile for users across different environments.
+
+## 7. References
+
+### Whisper Model by OpenAI
+- **Original Paper:** "Robust Speech Recognition via Large-Scale Weak Supervision" provides a detailed explanation of the Whisper model's development and its capabilities across different languages and tasks. [Read the paper](https://openai.com/research/whisper).
+- **GitHub Repository:** The open-source code and comprehensive documentation for the Whisper model are available on GitHub. This is essential for anyone looking to integrate or modify the Whisper model in their projects. [View the repository](https://github.com/openai/whisper).
+- **Demo:** Explore the capabilities of the Whisper model through interactive demos available online, such as on Hugging Face, showcasing its performance in speech recognition and translation. [Try the demo on Hugging Face](https://huggingface.co/openai/whisper-large).
+
+### Helsinki-NLP Models
+- **Original Paper:** "OPUS-MT – Building open translation services for the World" by Jörg Tiedemann and Santhosh Thottingal details the creation of numerous machine translation models under the Helsinki-NLP project, aiming to provide open and accessible translation services. [Read the paper](https://aclanthology.org/2020.eamt-1.61.pdf).
+- **GitHub Repository:** Helsinki-NLP maintains a repository containing several translation models, including the opus-mt models used for translating between Chinese and English. [View the repository](https://github.com/Helsinki-NLP/Opus-MT).
+- **Demo:** Test the translation models directly through demos provided on platforms like Hugging Face, which offer real-time translation capabilities. [Try the demo on Hugging Face](https://huggingface.co/Helsinki-NLP/opus-mt-zh-en).
+
+### XTTS-V2 Model by Coqui AI
+- **GitHub Repository:** The XTTS-V2 model, designed for multilingual text-to-speech applications, is developed by Coqui AI. The repository includes all necessary files for using and adapting the TTS model. [View the repository](https://github.com/coqui-ai/TTS).
+
+- **Papers:**
+
+  - Merging Phoneme and Char representations: https://arxiv.org/pdf/1811.07240.pdf
+
+  - Tacotron Transfer Learning : https://arxiv.org/pdf/1904.06508.pdf
+
+  - Phoneme Timing From Attention: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8683827
+
+  - Semi-Supervised Training to Improve Data Efficiency in End-to-End Speech Synthesis - https://arxiv.org/pdf/1808.10128.pdf
+
+  - Listening while Speaking: Speech Chain by Deep Learning - https://arxiv.org/pdf/1707.04879.pdf
+
+  - Generelized End-to-End Loss for Speaker Verification: https://arxiv.org/pdf/1710.10467.pdf
+
+  - Es-Tacotron2: Multi-Task Tacotron 2 with Pre-Trained Estimated Network for Reducing the Over-Smoothness Problem: https://www.mdpi.com/2078-2489/10/4/131/pdf
+
+    - Against Over-Smoothness
+
+  - FastSpeech: https://arxiv.org/pdf/1905.09263.pdf
+
+  - Learning Singing From Speech: https://arxiv.org/pdf/1912.10128.pdf
+
+  - TTS-GAN: https://arxiv.org/pdf/1909.11646.pdf
+
+    - they use duration and linguistic features for en2en TTS.
+    - Close to WaveNet performance.
+
+  - DurIAN: https://arxiv.org/pdf/1909.01700.pdf
+
+    - Duration aware Tacotron
+
+  - MelNet: https://arxiv.org/abs/1906.01083
+
+  - AlignTTS: https://arxiv.org/pdf/2003.01950.pdf
+
+  - Unsupervised Speech Decomposition via Triple Information Bottleneck
+
+    - https://arxiv.org/pdf/2004.11284.pdf
+    - https://anonymous0818.github.io/
+
+  - FlowTron: 
+
+    https://arxiv.org/pdf/2005.05957.pdf
+
+    - Inverse Autoregresive Flow on Tacotron like architecture
+    - WaveGlow as vocoder.
+    - Speech style embedding with Mixture of Gaussian model.
+    - Model is large and havier than vanilla Tacotron
+    - MOS values are slighly better than public Tacotron implementation.
+
+  - Efficiently Trainable Text-to-Speech System Based on Deep Convolutional Networks with Guided Attention : https://arxiv.org/pdf/1710.08969.pdf
+
+- **Demo:** Experience the capabilities of the XTTS-V2 model firsthand through an interactive demo provided by Coqui AI on Hugging Face. [Try the demo on huggingface](https://huggingface.co/spaces/coqui/xtts). 
+
+## License
+
+The system' s code and model weights are released under the MIT License. See [LICENSE](https://github.com/openai/whisper/blob/main/LICENSE) for further details.
