@@ -25,7 +25,7 @@ def process_audio(audio):
 
     # Use the time to create a unique foldername
     foldername = str(int(time.time()))
-    foldername = os.path.join("data/en-zh", foldername)
+    foldername = os.path.join("data/zh-en", foldername)
     os.makedirs(foldername, exist_ok=True)
 
 
