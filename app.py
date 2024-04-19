@@ -58,13 +58,14 @@ def process_audio(audio):
     # generation = tts_model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
     # audio_arr = generation.cpu().numpy().squeeze()
 
-    wav = tts.tts(text=translation, speaker_wav=audio, language="en")
+    # wav = tts.tts(text=translation, speaker_wav=audio, language="en")
 
 
     # Save output audio
     output_path = os.path.join(foldername, "translated_audio.wav")
     # sf.write(output_path, audio_arr, tts_model.config.sampling_rate)
-    sf.write(output_path, wav, 22050)
+    # sf.write(output_path, wav, 22050)
+    tts.tts_to_file(text=translation, speaker_wav=audio, language="en", output_path=output_path)
 
     return output_path, translation
 
@@ -103,13 +104,14 @@ def process_audio2(audio):
     # generation = tts_model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
     # audio_arr = generation.cpu().numpy().squeeze()
 
-    wav = tts.tts(text=translation, speaker_wav=audio, language="zh-cn")
+    # wav = tts.tts(text=translation, speaker_wav=audio, language="zh-cn")
 
 
     # Save output audio
     output_path = os.path.join(foldername, "translated_audio.wav")
     # sf.write(output_path, audio_arr, tts_model.config.sampling_rate)
-    sf.write(output_path, wav, 22050)
+    # sf.write(output_path, wav, 22050)
+    tts.tts_to_file(text=translation, speaker_wav=audio, language="zh-cn", output_path=output_path)
 
     return output_path, translation
 
