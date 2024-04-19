@@ -15,6 +15,7 @@ translator2 = pipeline("translation", model="Helsinki-NLP/opus-mt-en-zh")
 # tts_model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler_tts_mini_v0.1")
 # tts_tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler_tts_mini_v0.1")
 tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
+# tts.to("mps")
 
 
 def process_audio(audio):
@@ -30,13 +31,14 @@ def process_audio(audio):
 
 
     # Transcribe audio to text
+    current_time = time.time()
     audio_data = whisper.load_audio(audio)
 
     sf.write(os.path.join(foldername, "original.wav"), audio_data, 16000)
 
     audio_data = whisper.pad_or_trim(audio_data)
     transcription = whisper_model.transcribe(audio_data)["text"]
-
+    print("Time taken to transcribe: ", time.time() - current_time)
     # Print the transcription
     print(f'Original texts: {transcription}')
 
@@ -65,7 +67,7 @@ def process_audio(audio):
     output_path = os.path.join(foldername, "translated_audio.wav")
     # sf.write(output_path, audio_arr, tts_model.config.sampling_rate)
     # sf.write(output_path, wav, 22050)
-    tts.tts_to_file(text=translation, speaker_wav=audio, language="en", output_path=output_path)
+    tts.tts_to_file(text=translation, speaker_wav=audio, language="en", file_path=output_path)
 
     return output_path, translation
 
@@ -111,7 +113,8 @@ def process_audio2(audio):
     output_path = os.path.join(foldername, "translated_audio.wav")
     # sf.write(output_path, audio_arr, tts_model.config.sampling_rate)
     # sf.write(output_path, wav, 22050)
-    tts.tts_to_file(text=translation, speaker_wav=audio, language="zh-cn", output_path=output_path)
+    print(TTS.speakers)
+    tts.tts_to_file(text=translation, speaker_wav=audio, language="zh-cn", file_path=output_path)
 
     return output_path, translation
 
